@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_transactions
+    description: "Cleaned and standardized transaction data from IEEE-CIS dataset"
+    columns:
+      - name: transaction_id
+        description: "Unique transaction identifier"
+        tests:
+          - unique
+          - not_null
+      - name: transaction_amt
+        description: "Transaction amount in USD"
+        tests:
+          - not_null
+      - name: is_fraud
+        description: "Fraud label: 1 = fraud, 0 = legitimate"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+  - name: stg_identity
+    description: "Cleaned identity data joined to transactions"
+    columns:
+      - name: transaction_id
+        description: "Foreign key to stg_transactions"
+        tests:
+          - not_null
