@@ -3,9 +3,9 @@ fintech_dbt:
   outputs:
     dev:
       type: databricks
-      host: "{{ env_var('DBT_HOST') }}"
-      http_path: "{{ env_var('DBT_HTTP_PATH') }}"
+      host: dbc-5038f2f9-2187.cloud.databricks.com
+      http_path: /sql/1.0/warehouses/d70e11491ef23daf
       token: "{{ env_var('DBT_TOKEN') }}"
-      catalog: "{{ env_var('DBT_CATALOG') }}"
-      schema: "{{ env_var('DBT_SCHEMA') }}"
+      catalog: workspace
+      schema: fintech
       threads: 4
