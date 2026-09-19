@@ -44,6 +44,16 @@ models/
 2. **Transform** — dbt runs 5 models across staging → intermediate → mart layers
 3. **Test** — 6 dbt data tests: `unique`, `not_null`, `accepted_values`
 
+
+## Workflow Run (Databricks)
+
+![Workflow](screenshots/workflow_success.png)
+
+Both tasks succeeded in 4m 26s:
+- `ingest_raw_data` — PySpark ingestion (3m 4s)
+- `dbt_transform` — dbt run + test (1m 21s)
+
+
 ## dbt Test Results
 
 ```
