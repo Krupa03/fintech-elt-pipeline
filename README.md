@@ -4,11 +4,13 @@
 
 !\[Python](https://img.shields.io/badge/Python-3.14-blue)
 
-!\[Databricks](https://img.shields.io/badge/Databricks-Free%20Edition-red)
+!\[Databricks](https://img.shields.io/badge/Databricks-Serverless-red)
 
 !\[dbt](https://img.shields.io/badge/dbt-1.12.3-orange)
 
-!\[Delta Lake](https://img.shields.io/badge/Delta%20Lake-Unity%20Catalog-blue)
+!\[Delta Lake](https://img.shields.io/badge/Delta\_Lake-Unity\_Catalog-blue)
+
+!\[Tests](https://img.shields.io/badge/dbt\_tests-6\_passing-brightgreen)
 
 
 
@@ -20,9 +22,11 @@ End-to-end ELT pipeline built with Databricks, Delta Lake, and dbt on the IEEE-C
 
 
 
-Raw CSV → Unity Catalog Volume → Databricks Notebook (PySpark) → Delta Tables (Raw) → dbt (Transform) → Mart Tables
+```
 
+Raw CSV → Unity Catalog Volume → Databricks Notebook (PySpark) → Delta Tables → dbt → Mart Tables
 
+```
 
 
 
@@ -34,7 +38,7 @@ Raw CSV → Unity Catalog Volume → Databricks Notebook (PySpark) → Delta Tab
 
 |---|---|
 
-| Compute | Databricks (Serverless) |
+| Compute | Databricks Serverless |
 
 | Storage | Delta Lake (Unity Catalog) |
 
@@ -50,37 +54,51 @@ Raw CSV → Unity Catalog Volume → Databricks Notebook (PySpark) → Delta Tab
 
 
 
+```
+
 models/
 
 ├── staging/
 
-│ ├── stg\_transactions.sql # Clean raw transaction data
+│   ├── stg\_transactions.sql         # Clean raw transaction data
 
-│ └── stg\_identity.sql # Clean identity data
+│   └── stg\_identity.sql             # Clean identity data
 
 ├── intermediate/
 
-│ └── int\_transactions\_enriched.sql # Join transactions + identity
+│   └── int\_transactions\_enriched.sql  # Join transactions + identity, add risk fields
 
 └── mart/
 
-├── mart\_fraud\_summary.sql # Daily fraud rates by category
+&#x20;   ├── mart\_fraud\_summary.sql           # Daily fraud rates by product, card, amount tier
 
-└── mart\_high\_risk\_transactions.sql # Risk-scored transactions
+&#x20;   └── mart\_high\_risk\_transactions.sql  # Risk-scored transactions (score >= 2)
 
-
-
-
-
-\## Pipeline
+```
 
 
 
-1\. \*\*Ingest\*\* — PySpark notebook reads CSVs from Unity Catalog Volume → writes Delta tables
+\## Pipeline Steps
+
+
+
+1\. \*\*Ingest\*\* — PySpark notebook reads CSVs from Unity Catalog Volume → writes Delta tables (`workspace.fintech.raw\_transactions`, `workspace.fintech.raw\_identity`)
 
 2\. \*\*Transform\*\* — dbt runs 5 models across staging → intermediate → mart layers
 
-3\. \*\*Test\*\* — 6 dbt data tests (unique, not\_null, accepted\_values)
+3\. \*\*Test\*\* — 6 dbt data tests: `unique`, `not\_null`, `accepted\_values`
+
+
+
+\## dbt Test Results
+
+
+
+```
+
+Done. PASS=6 WARN=0 ERROR=0 SKIP=0 TOTAL=6
+
+```
 
 
 
@@ -92,17 +110,7 @@ models/
 
 \- Fraud rate varies significantly by product category and card network
 
-\- High-risk transactions identified by multi-factor risk scoring (amount, identity, proxy detection)
-
-
-
-\## dbt Test Results
-
-
-
-PASS=6 WARN=0 ERROR=0 SKIP=0 TOTAL=6
-
-
+\- High-risk transactions identified by multi-factor risk scoring (transaction amount, missing identity, proxy IP, missing email domain)
 
 
 
