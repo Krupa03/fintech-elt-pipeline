@@ -5,7 +5,7 @@ fintech_dbt:
       type: databricks
       host: dbc-5038f2f9-2187.cloud.databricks.com
       http_path: /sql/1.0/warehouses/d70e11491ef23daf
-      token: "{{ env_var('DBT_TOKEN') }}"
+      token: dapia1e3c07035e795af21d0a90df09c3ca9
       catalog: workspace
       schema: fintech
       threads: 4
